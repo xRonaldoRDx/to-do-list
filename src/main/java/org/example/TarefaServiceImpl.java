@@ -1,5 +1,8 @@
+package org.example;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class TarefaServiceImpl implements TarefaService {
     private final TarefaDAO tarefaDAO;
@@ -25,5 +28,19 @@ public class TarefaServiceImpl implements TarefaService {
     @Override
     public List<Tarefa> listarTodasTarefas() {
         return tarefaDAO.findAll();
+    }
+
+    @Override
+    public void alterarStatusTarefa(int id, StatusTarefa novoStatus) {
+        Optional<Tarefa> tarefaOptional = tarefaDAO.findById(id);
+        if (tarefaOptional.isPresent()) {
+            Tarefa tarefa = tarefaOptional.get();
+            tarefa.setStatus(novoStatus);
+            tarefa.setDataAlteracao(LocalDateTime.now());
+            tarefaDAO.update(tarefa);
+            System.out.println("\nStatus da tarefa " + id + " alterado para " + novoStatus);
+        } else {
+            System.err.println("Tarefa com ID " + id + " não encontrada.");
+        }
     }
 }
