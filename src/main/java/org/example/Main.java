@@ -8,15 +8,21 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        // INJEÇÃO DE DEPENDÊNCIA MANUAL
+        // 1. Garante que o banco de dados e a tabela existam ANTES de qualquer coisa.
+        Database.inicializarBanco();
+
+        // 2. Inicializa as camadas de acesso a dados e de serviço
         TarefaDAO tarefaDAO = new TarefaDAOImpl();
         TarefaService tarefaService = new TarefaServiceImpl(tarefaDAO);
 
+        // 3. Inicia o menu interativo
         iniciarMenu(tarefaService);
 
-        Database.closeConnection();
+        // 4. NÃO há mais chamada para Database.closeConnection() aqui.
     }
 
+    // O restante da classe Main continua exatamente como na versão do Commit 4...
+    // (iniciarMenu, exibirMenuPrincipal, cadastrarNovaTarefa, etc.)
     private static void iniciarMenu(TarefaService tarefaService) {
         Scanner scanner = new Scanner(System.in);
         boolean executando = true;
@@ -35,7 +41,7 @@ public class Main {
                         alterarStatusTarefa(scanner, tarefaService);
                         break;
                     case 3:
-                        listarTodasAsTarefas(tarefaService);
+                        listarTarefas(scanner, tarefaService);
                         break;
                     case 0:
                         executando = false;
@@ -48,11 +54,24 @@ public class Main {
                 System.err.println("Entrada inválida. Por favor, digite um número.");
                 scanner.nextLine();
             }
-
-
             System.out.println();
         }
         scanner.close();
+    }
+
+    private static void exibirMenuPrincipal() {
+        System.out.println("--- Gerenciador de Tarefas ---");
+        System.out.println("1. Cadastrar nova tarefa");
+        System.out.println("2. Alterar status de uma tarefa");
+        System.out.println("3. Listar tarefas (com filtro)");
+        System.out.println("0. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private static void cadastrarNovaTarefa(Scanner scanner, TarefaService tarefaService) {
+        System.out.print("Digite a descrição da nova tarefa: ");
+        String texto = scanner.nextLine();
+        tarefaService.adicionarTarefa(texto);
     }
 
     private static void alterarStatusTarefa(Scanner scanner, TarefaService tarefaService) {
@@ -71,15 +90,9 @@ public class Main {
 
             StatusTarefa novoStatus;
             switch (statusOpcao) {
-                case 1:
-                    novoStatus = StatusTarefa.NAO_INICIADA;
-                    break;
-                case 2:
-                    novoStatus = StatusTarefa.EM_PROCESSAMENTO;
-                    break;
-                case 3:
-                    novoStatus = StatusTarefa.CONCLUIDA;
-                    break;
+                case 1: novoStatus = StatusTarefa.NAO_INICIADA; break;
+                case 2: novoStatus = StatusTarefa.EM_PROCESSAMENTO; break;
+                case 3: novoStatus = StatusTarefa.CONCLUIDA; break;
                 default:
                     System.err.println("Opção de status inválida.");
                     return;
@@ -91,28 +104,46 @@ public class Main {
         }
     }
 
-    private static void exibirMenuPrincipal() {
-        System.out.println("--- Gerenciador de Tarefas ---");
-        System.out.println("1. Cadastrar nova tarefa");
-        System.out.println("2. Alterar status de uma tarefa");
-        System.out.println("3. Listar todas as tarefas"); // Este texto será alterado no futuro
-        System.out.println("0. Sair");
-        System.out.print("Escolha uma opção: ");
-    }
+    private static void listarTarefas(Scanner scanner, TarefaService tarefaService) {
+        System.out.println("\n--- Filtrar Tarefas ---");
+        System.out.println("1. Listar todas as tarefas");
+        System.out.println("2. Listar tarefas pendentes (Não Iniciadas e Em Processamento)");
+        System.out.println("3. Listar tarefas concluídas");
+        System.out.print("Escolha uma opção de filtro: ");
+        try {
+            int filtro = scanner.nextInt();
+            scanner.nextLine();
 
-    private static void cadastrarNovaTarefa(Scanner scanner, TarefaService tarefaService) {
-        System.out.print("Digite a descrição da nova tarefa: ");
-        String texto = scanner.nextLine();
-        tarefaService.adicionarTarefa(texto);
-    }
+            List<Tarefa> tarefas;
+            String titulo;
 
-    private static void listarTodasAsTarefas(TarefaService tarefaService) {
-        List<Tarefa> tarefas = tarefaService.listarTodasTarefas();
-        System.out.println("\n--- Todas as Tarefas ---");
-        if (tarefas.isEmpty()) {
-            System.out.println("Nenhuma tarefa cadastrada.");
-        } else {
-            imprimirListaDeTarefas(tarefas);
+            switch (filtro) {
+                case 1:
+                    tarefas = tarefaService.listarTodasTarefas();
+                    titulo = "--- Todas as Tarefas ---";
+                    break;
+                case 2:
+                    tarefas = tarefaService.listarTarefasPendentes();
+                    titulo = "--- Tarefas Pendentes ---";
+                    break;
+                case 3:
+                    tarefas = tarefaService.listarTarefasConcluidas();
+                    titulo = "--- Tarefas Concluídas ---";
+                    break;
+                default:
+                    System.err.println("Filtro inválido.");
+                    return;
+            }
+
+            System.out.println("\n" + titulo);
+            if (tarefas.isEmpty()) {
+                System.out.println("Nenhuma tarefa encontrada para este filtro.");
+            } else {
+                imprimirListaDeTarefas(tarefas);
+            }
+        } catch (InputMismatchException e) {
+            System.err.println("Opção de filtro inválida. Por favor, digite um número.");
+            scanner.nextLine();
         }
     }
 

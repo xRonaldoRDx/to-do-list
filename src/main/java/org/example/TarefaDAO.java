@@ -8,4 +8,6 @@ public interface TarefaDAO {
     List<Tarefa> findAll();
     Optional<Tarefa> findById(int id);
     Tarefa update(Tarefa tarefa);
+    List<Tarefa> findByStatus(StatusTarefa status);
+    void delete(int id);
 }

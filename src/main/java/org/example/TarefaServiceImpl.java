@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,21 @@ public class TarefaServiceImpl implements TarefaService {
         } else {
             System.err.println("Tarefa com ID " + id + " não encontrada.");
         }
+    }
+
+    @Override
+    public List<Tarefa> listarTarefasPendentes() {
+        List<Tarefa> naoIniciadas = tarefaDAO.findByStatus(StatusTarefa.NAO_INICIADA);
+        List<Tarefa> emProcessamento = tarefaDAO.findByStatus(StatusTarefa.EM_PROCESSAMENTO);
+
+        List<Tarefa> pendentes = new ArrayList<>();
+        pendentes.addAll(naoIniciadas);
+        pendentes.addAll(emProcessamento);
+        return pendentes;
+    }
+
+    @Override
+    public List<Tarefa> listarTarefasConcluidas() {
+        return tarefaDAO.findByStatus(StatusTarefa.CONCLUIDA);
     }
 }

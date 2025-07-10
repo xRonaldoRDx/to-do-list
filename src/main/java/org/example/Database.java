@@ -7,41 +7,40 @@ import java.sql.Statement;
 
 public class Database {
     private static final String URL = "jdbc:sqlite:tarefas.db";
-    private static Connection connection;
 
+    /**
+     * Retorna uma NOVA conexão com o banco de dados a cada chamada.
+     * Isso funciona perfeitamente com o padrão try-with-resources usado no DAO.
+     */
     public static Connection getConnection() {
-        if (connection == null) {
-            try {
-                connection = DriverManager.getConnection(URL);
-                inicializarBanco();
-            } catch (SQLException e) {
-                System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
-            }
-        }
-        return connection;
-    }
-
-    private static void inicializarBanco() {
-        String sql = "CREATE TABLE IF NOT EXISTS tarefas ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "texto TEXT NOT NULL,"
-                + "status TEXT NOT NULL,"
-                + "data_alteracao TEXT NOT NULL"
-                + ");";
-        try (Statement stmt = getConnection().createStatement()) {
-            stmt.execute(sql);
+        try {
+            return DriverManager.getConnection(URL);
         } catch (SQLException e) {
-            System.err.println("Erro ao inicializar o banco de dados: " + e.getMessage());
+            // Lança uma exceção para interromper a execução se a conexão falhar.
+            throw new RuntimeException("Erro ao conectar ao banco de dados: " + e.getMessage(), e);
         }
     }
 
-    public static void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.err.println("Erro ao fechar a conexão: " + e.getMessage());
-            }
+    /**
+     * Este método deve ser chamado uma única vez, no início da aplicação,
+     * para garantir que a tabela de tarefas exista.
+     */
+    public static void inicializarBanco() {
+        // Usamos try-with-resources aqui para garantir que esta conexão específica de inicialização seja fechada.
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+
+            String sql = "CREATE TABLE IF NOT EXISTS tarefas ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "texto TEXT NOT NULL,"
+                    + "status TEXT NOT NULL,"
+                    + "data_alteracao TEXT NOT NULL"
+                    + ");";
+            stmt.execute(sql);
+
+        } catch (SQLException e) {
+            // Lança uma exceção se a inicialização da tabela falhar.
+            throw new RuntimeException("Erro ao inicializar o banco de dados: " + e.getMessage(), e);
         }
     }
 }
