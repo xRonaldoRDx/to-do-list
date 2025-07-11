@@ -54,7 +54,7 @@ public class Main {
     }
 
     private static void exibirMenuPrincipal() {
-        System.out.println("--- Gerenciador de Tarefas ---");
+        System.out.println("--- To-Do-List ---");
         System.out.println("1. Cadastrar nova tarefa");
         System.out.println("2. Alterar status de uma tarefa");
         System.out.println("3. Listar tarefas (com filtro)");

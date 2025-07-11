@@ -37,6 +37,32 @@ public class MainController {
                 setText((empty || item == null) ? null : formatter.format(item));
             }
         });
+
+        tabelaTarefas.setRowFactory(tv -> new TableRow<Tarefa>() {
+            @Override
+            protected void updateItem(Tarefa tarefa, boolean empty) {
+                super.updateItem(tarefa, empty);
+                if (tarefa == null || empty) {
+                    setStyle("");
+                } else {
+                    if (isSelected()) {
+                        switch (tarefa.getStatus()) {
+                            case NAO_INICIADA: setStyle("-fx-background-color: #A64B4B;"); break;
+                            case EM_PROCESSAMENTO: setStyle("-fx-background-color: #A89855;"); break;
+                            case CONCLUIDA: setStyle("-fx-background-color: #599962;"); break;
+                            default: setStyle(""); break;
+                        }
+                    } else {
+                        switch (tarefa.getStatus()) {
+                            case NAO_INICIADA: setStyle("-fx-background-color: #613030;"); break;
+                            case EM_PROCESSAMENTO: setStyle("-fx-background-color: #635B33;"); break;
+                            case CONCLUIDA: setStyle("-fx-background-color: #355E3B;"); break;
+                            default: setStyle(""); break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void setTarefaService(TarefaService tarefaService) {
@@ -83,6 +109,34 @@ public class MainController {
     }
 
     @FXML
+    private void handleEditarTarefa() {
+        Tarefa selecionada = tabelaTarefas.getSelectionModel().getSelectedItem();
+        if (selecionada == null) {
+            mostrarAlerta("Atenção", "Por favor, selecione uma tarefa para editar.");
+            return;
+        }
+
+        // Cria uma caixa de diálogo para pedir o novo texto ao usuário
+        TextInputDialog dialog = new TextInputDialog(selecionada.getTexto());
+        dialog.setTitle("Editar Tarefa");
+        dialog.setHeaderText("Editando a tarefa ID: " + selecionada.getId());
+        dialog.setContentText("Novo texto:");
+
+        // Pega o resultado da caixa de diálogo
+        Optional<String> resultado = dialog.showAndWait();
+
+        // Se o usuário clicou em OK e o texto não está vazio, chama o serviço
+        resultado.ifPresent(novoTexto -> {
+            if (!novoTexto.trim().isEmpty()) {
+                tarefaService.editarTextoTarefa(selecionada.getId(), novoTexto);
+                atualizarTabela();
+            } else {
+                mostrarAlerta("Erro", "O texto da tarefa não pode ser vazio.");
+            }
+        });
+    }
+
+    @FXML
     private void handleAvancarStatus() {
         Tarefa selecionada = tabelaTarefas.getSelectionModel().getSelectedItem();
         if (selecionada == null) {
@@ -101,3 +155,4 @@ public class MainController {
         alert.showAndWait();
     }
 }
+

@@ -42,17 +42,32 @@ public class TarefaServiceImpl implements TarefaService {
             Tarefa tarefa = tarefaOptional.get();
             StatusTarefa statusAtual = tarefa.getStatus();
 
-            // Lógica de transição de status
             if (statusAtual == StatusTarefa.NAO_INICIADA) {
                 tarefa.setStatus(StatusTarefa.EM_PROCESSAMENTO);
             } else if (statusAtual == StatusTarefa.EM_PROCESSAMENTO) {
                 tarefa.setStatus(StatusTarefa.CONCLUIDA);
             }
-            // Se já estiver CONCLUIDA, o status não é alterado.
 
-            // Atualiza a data da modificação e salva no banco
             tarefa.setDataAlteracao(LocalDateTime.now());
             tarefaDAO.update(tarefa);
+        }
+    }
+
+    @Override
+    public void editarTextoTarefa(int id, String novoTexto) {
+        if (novoTexto == null || novoTexto.trim().isEmpty()) {
+            System.err.println("O novo texto da tarefa não pode ser vazio.");
+            return;
+        }
+
+        Optional<Tarefa> tarefaOptional = tarefaDAO.findById(id);
+        if (tarefaOptional.isPresent()) {
+            Tarefa tarefa = tarefaOptional.get();
+            tarefa.setTexto(novoTexto); // Altera o texto
+            tarefa.setDataAlteracao(LocalDateTime.now()); // Atualiza a data da modificação
+            tarefaDAO.update(tarefa); // Salva a tarefa atualizada no banco
+        } else {
+            System.err.println("Tentativa de editar tarefa com ID " + id + ", que não foi encontrada.");
         }
     }
 

@@ -55,38 +55,30 @@
 
 /* --- Estilos da Tabela (TableView) --- */
 
-/* Fundo geral da tabela */
 .table-view {
     -fx-background-color: #3D3D3D;
     -fx-background-radius: 8px;
 }
 
-/* CORREÇÃO PRINCIPAL AQUI - REGRAS MAIS ESPECÍFICAS */
-
-/* Define a cor de fundo para TODA a área do cabeçalho */
 .table-view .column-header-background {
     -fx-background-color: #2D2D2D;
 }
 
-/* Força a cor de fundo em cada cabeçalho de coluna individualmente */
 .table-view .column-header {
     -fx-background-color: #2D2D2D;
-    -fx-border-color: #3D3D3D; /* Adiciona uma leve borda para separação */
+    -fx-border-color: #3D3D3D;
 }
 
-/* Define a cor do TEXTO dentro de cada título de coluna */
 .table-view .column-header .label {
     -fx-text-fill: #E0E0E0;
     -fx-font-weight: bold;
     -fx-padding: 10px;
 }
 
-/* Estiliza o pequeno canto superior direito da tabela para combinar */
 .table-view .corner {
     -fx-background-color: #2D2D2D;
 }
 
-/* Células da tabela */
 .table-view .table-cell {
     -fx-text-fill: #E0E0E0;
     -fx-border-color: transparent;
@@ -94,15 +86,30 @@
     -fx-font-size: 13px;
 }
 
-/* Cor das linhas (efeito zebrado) */
-.table-view .table-row-cell:odd {
-    -fx-background-color: #3D3D3D;
-}
-.table-view .table-row-cell:even {
-    -fx-background-color: #424242;
+/* REMOVEMOS O EFEITO ZEBRADO PARA DAR LUGAR ÀS CORES DE STATUS */
+.table-view .table-row-cell {
+    -fx-background-color: #3D3D3D; /* Um fundo padrão */
 }
 
-/* Cor da linha ao ser selecionada */
+/* Cor da linha ao ser selecionada (tem prioridade) */
 .table-view .table-row-cell:selected {
     -fx-background-color: #007B9E;
+}
+
+/* --- ESTILOS DE LINHA POR STATUS --- */
+
+.nao-iniciada-row {
+    -fx-background-color: #613030; /* Tom de vermelho escuro */
+}
+
+.em-processamento-row {
+    -fx-background-color: #635B33; /* Tom de amarelo/ocre escuro */
+}
+
+.concluida-row {
+    -fx-background-color: #355E3B; /* Tom de verde escuro */
+}
+
+.button-edit {
+    -fx-background-color: #555555;
 }

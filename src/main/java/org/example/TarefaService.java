@@ -7,6 +7,7 @@ public interface TarefaService {
     void alterarStatusTarefa(int id, StatusTarefa novoStatus);
     void delete(int id);
     void avancarStatusTarefa(int id);
+    void editarTextoTarefa(int id, String novoTexto);
 
     List<Tarefa> listarTodasTarefas();
     List<Tarefa> listarTarefasPendentes();

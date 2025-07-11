@@ -15,7 +15,7 @@ public class MainApp extends Application {
         MainController controller = loader.getController();
         controller.setTarefaService(tarefaService);
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Gerenciador de Tarefas Moderno");
+        primaryStage.setTitle("To-Do-List");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
