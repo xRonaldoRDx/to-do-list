@@ -21,6 +21,8 @@ public class MainController {
     @FXML private TableColumn<Tarefa, LocalDateTime> colunaData;
     @FXML private TextField campoNovaTarefa;
 
+    @FXML private ComboBox<String> filtroStatusComboBox;
+
     @FXML
     public void initialize() {
         tabelaTarefas.setItems(listaDeTarefasObservavel);
@@ -63,6 +65,9 @@ public class MainController {
                 }
             }
         });
+
+        filtroStatusComboBox.setItems(FXCollections.observableArrayList("Todas", "Não Iniciadas", "Em Processamento", "Concluídas", "Pendentes"));
+        filtroStatusComboBox.getSelectionModel().selectFirst();
     }
 
     public void setTarefaService(TarefaService tarefaService) {
@@ -79,6 +84,35 @@ public class MainController {
     }
 
     @FXML
+    private void handleFiltrarTarefas() {
+        String filtroSelecionado = filtroStatusComboBox.getSelectionModel().getSelectedItem();
+        List<Tarefa> tarefasFiltradas;
+
+        if (tarefaService != null) {
+            switch (filtroSelecionado) {
+                case "Não Iniciadas":
+                    tarefasFiltradas = tarefaService.findByStatus(StatusTarefa.NAO_INICIADA);
+                    break;
+                case "Em Processamento":
+                    tarefasFiltradas = tarefaService.findByStatus(StatusTarefa.EM_PROCESSAMENTO);
+                    break;
+                case "Concluídas":
+                    tarefasFiltradas = tarefaService.listarTarefasConcluidas();
+                    break;
+                case "Pendentes":
+                    tarefasFiltradas = tarefaService.listarTarefasPendentes();
+                    break;
+                case "Todas":
+                default:
+                    tarefasFiltradas = tarefaService.listarTodasTarefas();
+                    break;
+            }
+            listaDeTarefasObservavel.clear();
+            listaDeTarefasObservavel.addAll(tarefasFiltradas);
+        }
+    }
+
+    @FXML
     private void handleAdicionarTarefa() {
         String texto = campoNovaTarefa.getText();
         if (texto == null || texto.trim().isEmpty()) {
@@ -88,6 +122,7 @@ public class MainController {
         tarefaService.adicionarTarefa(texto);
         campoNovaTarefa.clear();
         atualizarTabela();
+        handleFiltrarTarefas();
     }
 
     @FXML
@@ -105,6 +140,7 @@ public class MainController {
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             tarefaService.delete(selecionada.getId());
             atualizarTabela();
+            handleFiltrarTarefas();
         }
     }
 
@@ -116,20 +152,18 @@ public class MainController {
             return;
         }
 
-        // Cria uma caixa de diálogo para pedir o novo texto ao usuário
         TextInputDialog dialog = new TextInputDialog(selecionada.getTexto());
         dialog.setTitle("Editar Tarefa");
         dialog.setHeaderText("Editando a tarefa ID: " + selecionada.getId());
         dialog.setContentText("Novo texto:");
 
-        // Pega o resultado da caixa de diálogo
         Optional<String> resultado = dialog.showAndWait();
 
-        // Se o usuário clicou em OK e o texto não está vazio, chama o serviço
         resultado.ifPresent(novoTexto -> {
             if (!novoTexto.trim().isEmpty()) {
                 tarefaService.editarTextoTarefa(selecionada.getId(), novoTexto);
                 atualizarTabela();
+                handleFiltrarTarefas();
             } else {
                 mostrarAlerta("Erro", "O texto da tarefa não pode ser vazio.");
             }
@@ -145,6 +179,7 @@ public class MainController {
         }
         tarefaService.avancarStatusTarefa(selecionada.getId());
         atualizarTabela();
+        handleFiltrarTarefas();
     }
 
     private void mostrarAlerta(String titulo, String mensagem) {
@@ -155,4 +190,3 @@ public class MainController {
         alert.showAndWait();
     }
 }
-

@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
-    <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
-
-    <Label styleClass="header-label" text="To-Do-List" />
-
-    <TableView fx:id="tabelaTarefas" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="colunaId" prefWidth="50.0" text="ID" />
-            <TableColumn fx:id="colunaDescricao" prefWidth="350.0" text="Descrição" />
-            <TableColumn fx:id="colunaStatus" prefWidth="150.0" text="Status" />
-            <TableColumn fx:id="colunaData" prefWidth="200.0" text="Última Alteração" />
-        </columns>
-    </TableView>
-
-    <HBox alignment="CENTER_LEFT" spacing="10.0">
-        <TextField fx:id="campoNovaTarefa" promptText="Digite a descrição da nova tarefa..." HBox.hgrow="ALWAYS" />
-        <Button onAction="#handleAdicionarTarefa" styleClass="button-add" text="Adicionar Tarefa" />
-    </HBox>
-
-    <HBox alignment="CENTER" spacing="10.0">
-        <Button onAction="#handleExcluirTarefa" styleClass="button-delete" text="Excluir Selecionada" />
-
-        <Button onAction="#handleEditarTarefa" styleClass="button-edit" text="Editar Tarefa" />
-
-        <Button onAction="#handleAvancarStatus" styleClass="button-update" text="Avançar Status" />
-    </HBox>
-</VBox>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
+    <children>
+        <VBox layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="580.0" spacing="10">
+            <children>
+                <Label text="Minhas Tarefas" styleClass="header-label"/>
+                <TextField fx:id="campoNovaTarefa" promptText="Nova tarefa..."/>
+                <HBox spacing="10">
+                    <Button text="Adicionar" onAction="#handleAdicionarTarefa" styleClass="button-add"/>
+                    <Button text="Excluir" onAction="#handleExcluirTarefa" styleClass="button-delete"/>
+                    <Button text="Editar" onAction="#handleEditarTarefa" styleClass="button-update"/>
+                    <Button text="Avançar Status" onAction="#handleAvancarStatus" styleClass="button-edit"/>
+                    <ComboBox fx:id="filtroStatusComboBox" promptText="Filtrar por Status" onAction="#handleFiltrarTarefas"/>
+                </HBox>
+                <TableView fx:id="tabelaTarefas">
+                    <columns>
+                        <TableColumn fx:id="colunaId" text="ID" />
+                        <TableColumn fx:id="colunaDescricao" text="Descrição" />
+                        <TableColumn fx:id="colunaStatus" text="Status" />
+                        <TableColumn fx:id="colunaData" text="Última Alteração" />
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

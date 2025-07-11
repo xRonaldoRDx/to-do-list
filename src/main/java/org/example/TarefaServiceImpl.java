@@ -63,9 +63,9 @@ public class TarefaServiceImpl implements TarefaService {
         Optional<Tarefa> tarefaOptional = tarefaDAO.findById(id);
         if (tarefaOptional.isPresent()) {
             Tarefa tarefa = tarefaOptional.get();
-            tarefa.setTexto(novoTexto); // Altera o texto
-            tarefa.setDataAlteracao(LocalDateTime.now()); // Atualiza a data da modificação
-            tarefaDAO.update(tarefa); // Salva a tarefa atualizada no banco
+            tarefa.setTexto(novoTexto);
+            tarefa.setDataAlteracao(LocalDateTime.now());
+            tarefaDAO.update(tarefa);
         } else {
             System.err.println("Tentativa de editar tarefa com ID " + id + ", que não foi encontrada.");
         }
@@ -92,5 +92,10 @@ public class TarefaServiceImpl implements TarefaService {
     @Override
     public List<Tarefa> listarTarefasConcluidas() {
         return tarefaDAO.findByStatus(StatusTarefa.CONCLUIDA);
+    }
+
+    @Override
+    public List<Tarefa> findByStatus(StatusTarefa status) {
+        return tarefaDAO.findByStatus(status);
     }
 }

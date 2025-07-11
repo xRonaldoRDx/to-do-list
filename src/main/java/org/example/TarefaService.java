@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TarefaService {
     void adicionarTarefa(String texto);
@@ -12,4 +13,5 @@ public interface TarefaService {
     List<Tarefa> listarTodasTarefas();
     List<Tarefa> listarTarefasPendentes();
     List<Tarefa> listarTarefasConcluidas();
+    List<Tarefa> findByStatus(StatusTarefa status); // Esta linha declara o método na interface
 }
