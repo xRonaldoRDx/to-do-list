@@ -82,9 +82,6 @@ public class MainController {
         }
     }
 
-    /**
-     * MÉTODO SUBSTITUÍDO: Agora chama a nova lógica de avançar status.
-     */
     @FXML
     private void handleAvancarStatus() {
         Tarefa selecionada = tabelaTarefas.getSelectionModel().getSelectedItem();
@@ -92,7 +89,7 @@ public class MainController {
             mostrarAlerta("Atenção", "Por favor, selecione uma tarefa para avançar o status.");
             return;
         }
-        // Chama o novo método do serviço que contém a lógica de transição
+
         tarefaService.avancarStatusTarefa(selecionada.getId());
         atualizarTabela();
     }
