@@ -1,28 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
     <children>
-        <VBox layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="580.0" spacing="10">
+        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="580.0" spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
-                <Label text="Minhas Tarefas" styleClass="header-label"/>
-                <TextField fx:id="campoNovaTarefa" promptText="Nova tarefa..."/>
-                <HBox spacing="10">
-                    <Button text="Adicionar" onAction="#handleAdicionarTarefa" styleClass="button-add"/>
-                    <Button text="Excluir" onAction="#handleExcluirTarefa" styleClass="button-delete"/>
-                    <Button text="Editar" onAction="#handleEditarTarefa" styleClass="button-update"/>
-                    <Button text="Avançar Status" onAction="#handleAvancarStatus" styleClass="button-edit"/>
-                    <ComboBox fx:id="filtroStatusComboBox" promptText="Filtrar por Status" onAction="#handleFiltrarTarefas"/>
+                <Label text="Minhas Tarefas" styleClass="header-label">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="campoNovaTarefa" promptText="Nova tarefa..." styleClass="text-field" />
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <children>
+                        <Button text="Adicionar" onAction="#handleAdicionarTarefa" styleClass="button-add"/>
+                        <Button text="Excluir" onAction="#handleExcluirTarefa" styleClass="button-delete"/>
+                        <Button text="Editar" onAction="#handleEditarTarefa" styleClass="button-update"/>
+                        <Button text="Avançar Status" onAction="#handleAvancarStatus" styleClass="button-edit"/>
+                        <ComboBox fx:id="filtroStatusComboBox" promptText="Filtrar por Status" onAction="#handleFiltrarTarefas"/>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                    </VBox.margin>
                 </HBox>
-                <TableView fx:id="tabelaTarefas">
+                <TableView fx:id="tabelaTarefas" VBox.vgrow="ALWAYS" styleClass="table-view">
                     <columns>
-                        <TableColumn fx:id="colunaId" text="ID" />
-                        <TableColumn fx:id="colunaDescricao" text="Descrição" />
-                        <TableColumn fx:id="colunaStatus" text="Status" />
-                        <TableColumn fx:id="colunaData" text="Última Alteração" />
+                        <TableColumn fx:id="colunaId" prefWidth="75.0" text="ID" />
+                        <TableColumn fx:id="colunaDescricao" prefWidth="250.0" text="Descrição" />
+                        <TableColumn fx:id="colunaStatus" prefWidth="120.0" text="Status" />
+                        <TableColumn fx:id="colunaData" prefWidth="150.0" text="Última Alteração" />
                     </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
                 </TableView>
             </children>
         </VBox>
