@@ -82,10 +82,6 @@ public class MainController {
         }
     }
 
-    /**
-     * VOLTAMOS A TER O MÉTODO ORIGINAL:
-     * Marca diretamente a tarefa selecionada como CONCLUIDA.
-     */
     @FXML
     private void handleMarcarConcluida() {
         Tarefa selecionada = tabelaTarefas.getSelectionModel().getSelectedItem();
