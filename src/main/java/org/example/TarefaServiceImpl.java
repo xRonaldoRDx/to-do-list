@@ -15,7 +15,6 @@ public class TarefaServiceImpl implements TarefaService {
     @Override
     public void adicionarTarefa(String texto) {
         if (texto == null || texto.trim().isEmpty()) {
-            System.err.println("O texto da tarefa não pode ser vazio.");
             return;
         }
         Tarefa novaTarefa = new Tarefa();
@@ -23,12 +22,6 @@ public class TarefaServiceImpl implements TarefaService {
         novaTarefa.setStatus(StatusTarefa.NAO_INICIADA);
         novaTarefa.setDataAlteracao(LocalDateTime.now());
         tarefaDAO.save(novaTarefa);
-        System.out.println("\nTarefa adicionada com sucesso!");
-    }
-
-    @Override
-    public List<Tarefa> listarTodasTarefas() {
-        return tarefaDAO.findAll();
     }
 
     @Override
@@ -39,20 +32,24 @@ public class TarefaServiceImpl implements TarefaService {
             tarefa.setStatus(novoStatus);
             tarefa.setDataAlteracao(LocalDateTime.now());
             tarefaDAO.update(tarefa);
-            System.out.println("\nStatus da tarefa " + id + " alterado para " + novoStatus);
-        } else {
-            System.err.println("Tarefa com ID " + id + " não encontrada.");
         }
     }
 
     @Override
-    public List<Tarefa> listarTarefasPendentes() {
-        List<Tarefa> naoIniciadas = tarefaDAO.findByStatus(StatusTarefa.NAO_INICIADA);
-        List<Tarefa> emProcessamento = tarefaDAO.findByStatus(StatusTarefa.EM_PROCESSAMENTO);
+    public void delete(int id) {
+        tarefaDAO.delete(id);
+    }
 
+    @Override
+    public List<Tarefa> listarTodasTarefas() {
+        return tarefaDAO.findAll();
+    }
+
+    @Override
+    public List<Tarefa> listarTarefasPendentes() {
         List<Tarefa> pendentes = new ArrayList<>();
-        pendentes.addAll(naoIniciadas);
-        pendentes.addAll(emProcessamento);
+        pendentes.addAll(tarefaDAO.findByStatus(StatusTarefa.NAO_INICIADA));
+        pendentes.addAll(tarefaDAO.findByStatus(StatusTarefa.EM_PROCESSAMENTO));
         return pendentes;
     }
 

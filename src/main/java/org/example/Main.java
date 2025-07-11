@@ -8,21 +8,15 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        // 1. Garante que o banco de dados e a tabela existam ANTES de qualquer coisa.
         Database.inicializarBanco();
 
-        // 2. Inicializa as camadas de acesso a dados e de serviço
         TarefaDAO tarefaDAO = new TarefaDAOImpl();
         TarefaService tarefaService = new TarefaServiceImpl(tarefaDAO);
 
-        // 3. Inicia o menu interativo
         iniciarMenu(tarefaService);
 
-        // 4. NÃO há mais chamada para Database.closeConnection() aqui.
     }
 
-    // O restante da classe Main continua exatamente como na versão do Commit 4...
-    // (iniciarMenu, exibirMenuPrincipal, cadastrarNovaTarefa, etc.)
     private static void iniciarMenu(TarefaService tarefaService) {
         Scanner scanner = new Scanner(System.in);
         boolean executando = true;
