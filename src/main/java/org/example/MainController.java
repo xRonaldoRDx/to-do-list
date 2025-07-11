@@ -82,14 +82,18 @@ public class MainController {
         }
     }
 
+    /**
+     * MÉTODO SUBSTITUÍDO: Agora chama a nova lógica de avançar status.
+     */
     @FXML
-    private void handleMarcarConcluida() {
+    private void handleAvancarStatus() {
         Tarefa selecionada = tabelaTarefas.getSelectionModel().getSelectedItem();
         if (selecionada == null) {
-            mostrarAlerta("Atenção", "Por favor, selecione uma tarefa para marcar como concluída.");
+            mostrarAlerta("Atenção", "Por favor, selecione uma tarefa para avançar o status.");
             return;
         }
-        tarefaService.alterarStatusTarefa(selecionada.getId(), StatusTarefa.CONCLUIDA);
+        // Chama o novo método do serviço que contém a lógica de transição
+        tarefaService.avancarStatusTarefa(selecionada.getId());
         atualizarTabela();
     }
 
