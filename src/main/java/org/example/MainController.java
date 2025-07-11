@@ -83,13 +83,13 @@ public class MainController {
     }
 
     @FXML
-    private void handleMarcarConcluida() {
+    private void handleAvancarStatus() {
         Tarefa selecionada = tabelaTarefas.getSelectionModel().getSelectedItem();
         if (selecionada == null) {
-            mostrarAlerta("Atenção", "Por favor, selecione uma tarefa para marcar como concluída.");
+            mostrarAlerta("Atenção", "Por favor, selecione uma tarefa para avançar o status.");
             return;
         }
-        tarefaService.alterarStatusTarefa(selecionada.getId(), StatusTarefa.CONCLUIDA);
+        tarefaService.avancarStatusTarefa(selecionada.getId());
         atualizarTabela();
     }
 

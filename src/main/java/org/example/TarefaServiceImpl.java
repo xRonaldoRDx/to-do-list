@@ -36,6 +36,27 @@ public class TarefaServiceImpl implements TarefaService {
     }
 
     @Override
+    public void avancarStatusTarefa(int id) {
+        Optional<Tarefa> tarefaOptional = tarefaDAO.findById(id);
+        if (tarefaOptional.isPresent()) {
+            Tarefa tarefa = tarefaOptional.get();
+            StatusTarefa statusAtual = tarefa.getStatus();
+
+            // Lógica de transição de status
+            if (statusAtual == StatusTarefa.NAO_INICIADA) {
+                tarefa.setStatus(StatusTarefa.EM_PROCESSAMENTO);
+            } else if (statusAtual == StatusTarefa.EM_PROCESSAMENTO) {
+                tarefa.setStatus(StatusTarefa.CONCLUIDA);
+            }
+            // Se já estiver CONCLUIDA, o status não é alterado.
+
+            // Atualiza a data da modificação e salva no banco
+            tarefa.setDataAlteracao(LocalDateTime.now());
+            tarefaDAO.update(tarefa);
+        }
+    }
+
+    @Override
     public void delete(int id) {
         tarefaDAO.delete(id);
     }

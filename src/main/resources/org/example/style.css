@@ -1,16 +1,108 @@
-.root { -fx-background-color: #2D2D2D; -fx-font-family: "Segoe UI", Arial, sans-serif; }
-.header-label { -fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #E0E0E0; }
-.button { -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8px; -fx-padding: 10px 20px; -fx-cursor: hand; }
-.button:hover { -fx-opacity: 0.9; }
-.button-add { -fx-background-color: #008CBA; }
-.button-delete { -fx-background-color: #f44336; }
-.button-update { -fx-background-color: #fca903; }
-.text-field { -fx-background-color: #555555; -fx-text-fill: #E0E0E0; -fx-background-radius: 8px; -fx-font-size: 14px; -fx-prompt-text-fill: #999999; -fx-padding: 10px; -fx-border-color: #777777; -fx-border-radius: 8px; }
-.text-field:focused { -fx-border-color: #008CBA; }
-.table-view { -fx-background-color: #3D3D3D; -fx-background-radius: 8px; }
-.table-view .column-header-background { -fx-background-color: #2D2D2D; }
-.table-view .column-header .label { -fx-text-fill: #E0E0E0; -fx-font-weight: bold; -fx-padding: 10px; }
-.table-view .table-cell { -fx-text-fill: #E0E0E0; -fx-border-color: transparent; -fx-padding: 12px; -fx-font-size: 13px; }
-.table-view .table-row-cell:odd { -fx-background-color: #3D3D3D; }
-.table-view .table-row-cell:even { -fx-background-color: #424242; }
-.table-view .table-row-cell:selected { -fx-background-color: #007B9E; }
+/* Estilo geral da aplicação (fundo, fonte) */
+.root {
+    -fx-background-color: #2D2D2D;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Estilo para o título principal */
+.header-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E0E0E0;
+}
+
+/* Estilo geral para todos os botões */
+.button {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+/* Estilos específicos para cada tipo de botão */
+.button-add {
+    -fx-background-color: #008CBA;
+}
+
+.button-delete {
+    -fx-background-color: #f44336;
+}
+
+.button-update {
+    -fx-background-color: #fca903;
+}
+
+/* Estilo do campo de texto para adicionar nova tarefa */
+.text-field {
+    -fx-background-color: #555555;
+    -fx-text-fill: #E0E0E0;
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #999999;
+    -fx-padding: 10px;
+    -fx-border-color: #777777;
+    -fx-border-radius: 8px;
+}
+
+.text-field:focused {
+    -fx-border-color: #008CBA;
+}
+
+/* --- Estilos da Tabela (TableView) --- */
+
+/* Fundo geral da tabela */
+.table-view {
+    -fx-background-color: #3D3D3D;
+    -fx-background-radius: 8px;
+}
+
+/* CORREÇÃO PRINCIPAL AQUI - REGRAS MAIS ESPECÍFICAS */
+
+/* Define a cor de fundo para TODA a área do cabeçalho */
+.table-view .column-header-background {
+    -fx-background-color: #2D2D2D;
+}
+
+/* Força a cor de fundo em cada cabeçalho de coluna individualmente */
+.table-view .column-header {
+    -fx-background-color: #2D2D2D;
+    -fx-border-color: #3D3D3D; /* Adiciona uma leve borda para separação */
+}
+
+/* Define a cor do TEXTO dentro de cada título de coluna */
+.table-view .column-header .label {
+    -fx-text-fill: #E0E0E0;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+/* Estiliza o pequeno canto superior direito da tabela para combinar */
+.table-view .corner {
+    -fx-background-color: #2D2D2D;
+}
+
+/* Células da tabela */
+.table-view .table-cell {
+    -fx-text-fill: #E0E0E0;
+    -fx-border-color: transparent;
+    -fx-padding: 12px;
+    -fx-font-size: 13px;
+}
+
+/* Cor das linhas (efeito zebrado) */
+.table-view .table-row-cell:odd {
+    -fx-background-color: #3D3D3D;
+}
+.table-view .table-row-cell:even {
+    -fx-background-color: #424242;
+}
+
+/* Cor da linha ao ser selecionada */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #007B9E;
+}
